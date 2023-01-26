@@ -2,12 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
-sbit S1 = P0^7;
+sbit S1 = P1^0;
 sbit S2 = P2^7;
 
-sbit north_red = P1^0;
-sbit north_yellow = P1^1;
-sbit north_green = P1^2;
 
 sbit south_red = P1^3;
 sbit south_yellow = P1^4;
@@ -32,9 +29,9 @@ void displayOpen();
 int j;
 char full_name[] = "NOTHING";
 char south[] = "SOUTH OPEN";
-char north[] = "NORTH OPEN";
 char east[] = "EAST OPEN";
 char west[] = "WEST OPEN";
+char myData[] = "Developed by Fahim";
 
 void delay2(){
     unsigned int i;
@@ -46,42 +43,44 @@ void displayOpen(int count){
 	lcdcmd(0x38);delay2();
   lcdcmd(0x80);delay2();
   lcdcmd(0x0C);delay2();
-		
-		if(count==1){
- 		lcdcmd(0xC0);delay2();
-        for(j = 0; j < strlen(north); j++) {
-          lcddata(north[j]);delay2();
-        }
-		}
-
-
-       if(count==2){
- 		lcdcmd(0xC0);delay2();
+	
+       if(count==1){
         for(j = 0; j < strlen(south); j++) {
           lcddata(south[j]);delay2();
         }
+					lcdcmd(0xC0);delay2();
+	for(j=0;j<strlen(myData);j++){
+		lcddata(myData[j]);
+		delay2();
+	}
 	   }
 
-	   if(count==3){
- lcdcmd(0xC0);delay2();
+	   if(count==2){
         for(j = 0; j < strlen(east); j++) {
           lcddata(east[j]);delay2();
         }
+					lcdcmd(0xC0);delay2();
+	for(j=0;j<strlen(myData);j++){
+		lcddata(myData[j]);
+		delay2();
+	}
 	   }
 
-	   if(count==4){
-		lcdcmd(0xC0);delay2();
+	   if(count==3){
         for(j = 0; j < strlen(west); j++) {
           lcddata(west[j]);delay2();
         }
+					lcdcmd(0xC0);delay2();
+	for(j=0;j<strlen(myData);j++){
+		lcddata(myData[j]);
+		delay2();
+	}
 	   }
 		delay2();delay2();
-    	//lcdcmd(0x01);delay();
 }
 
 void delay3(unsigned int time) 
 {
-	
     unsigned int i, j;
     for(i=0; i<time; i++)
         for(j=0; j<1275; j++);
@@ -89,8 +88,6 @@ void delay3(unsigned int time)
 
 void delay(unsigned int time) 
 {
-	
-  
 	unsigned char seg[10]={0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
 	unsigned char x;
 	int num1,num2;
@@ -98,20 +95,18 @@ void delay(unsigned int time)
 	P0=0x00;
 		for(x=time; x<=time; x--){
 			
-			//P0=seg[x];
-			//delay3(150);
 			num1 = x/10;   
 			S1 = 1;					
 			S2 = 0;
 			P0 = seg[num1];  
-			delay3(150);
+			delay3(50);
 
 			
 			num2 = x%10;    
 			S1 = 0;					
       S2 = 1;
 			P0 = seg[num2];
-			delay3(150);
+			delay3(50);
 		}
 }
 
@@ -120,8 +115,6 @@ void main(){
     P3=0x00;
     while(1)
     {		
-			north_red=1;
-			north_green=north_yellow=0;
 			south_red=1;
 			south_green=south_yellow=0;
 			east_red=1;
@@ -129,27 +122,16 @@ void main(){
 			west_red=1;
 			west_green=west_yellow=0;
 			
-        // open north
-        north_red = 0;
-				north_yellow=0;
-        north_green = 1;
-				displayOpen(1);
-				delay(9);
-				east_red = 0;
-				east_yellow=1;
-				delay(4);
-				north_green = 0;
-				north_red = 1;
 				
 				// open east
         east_red = 0;
 				east_yellow=0;
         east_green = 1;
-				displayOpen(2);
-				delay(9);
+				displayOpen(1);
+				delay(20);
 				south_red = 0;
 				south_yellow=1;
-				delay(4);
+				delay(5);
 				east_green = 0;
 				east_red = 1;
 				
@@ -158,11 +140,11 @@ void main(){
 				south_red = 0;
 				south_yellow=0;
         south_green = 1;
-				displayOpen(3);
-				delay(9);
+				displayOpen(2);
+				delay(15);
 				west_red = 0;
 				west_yellow=1;
-				delay(4);
+				delay(5);
 				south_green = 0;
 				south_red = 1;
 				
@@ -170,11 +152,11 @@ void main(){
 				west_red = 0;
 				west_yellow=0;
         west_green = 1;
-				displayOpen(4);
-				delay(9);
-				north_red = 0;
-				north_yellow=1;
-				delay(4);
+				displayOpen(3);
+				delay(10);
+				east_red = 0;
+				east_yellow = 1;
+				delay(5);
 				west_green = 0;
 				west_red = 1;	
     }
