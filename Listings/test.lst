@@ -1,0 +1,122 @@
+C51 COMPILER V9.60.0.0   TEST                                                              01/26/2023 21:41:29 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TEST
+OBJECT MODULE PLACED IN .\Objects\test.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE test.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\test
+                    -.lst) TABS(2) OBJECT(.\Objects\test.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include <stdio.h>
+   3          #include <string.h>
+   4          sbit red=P1^0;
+   5          sbit yellow=P1^1;
+   6          sbit green=P1^2;
+   7          
+   8          sbit rs=P1^3;
+   9          sbit rw=P1^4;
+  10          sbit en=P1^5;
+  11          void delay2();
+  12            void lcdcmd(unsigned char val);
+  13            void lcddata(unsigned char val);
+  14            void displayInstruction(int count);
+  15          int j;
+  16          char north[] = "NORTH OPEN";
+  17          
+  18          void ssd_delay(int y); 
+  19          
+  20          void main(){
+  21   1        
+  22   1        red=yellow=green=0;
+  23   1        while(1){
+  24   2          displayInstruction(1);
+  25   2          red=1;
+  26   2          ssd_delay(1);
+  27   2          red=0;
+  28   2          yellow=1;
+  29   2          ssd_delay(1);
+  30   2          yellow=0;
+  31   2          green=1;
+  32   2          ssd_delay(1);
+  33   2          green=0;
+  34   2        }
+  35   1      }
+  36          void ssd_delay(int y){
+  37   1        unsigned char
+  38   1        ssd[10]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+  39   1        unsigned char x;
+  40   1        unsigned int i,j;
+  41   1      
+  42   1      
+  43   1          for(x=0;x<=y;x++){
+  44   2          //P3=ssd[x];
+  45   2          for(i=0;i<35000;i++);
+  46   2            for(j=0;j<=9;j++){
+  47   3              P2=ssd[j];
+  48   3              for(i=0;i<35000;i++);
+  49   3              if(j==9)
+  50   3                P2=ssd[0];
+  51   3              
+  52   3            }
+  53   2          }
+  54   1      }
+C51 COMPILER V9.60.0.0   TEST                                                              01/26/2023 21:41:29 PAGE 2   
+
+  55          
+  56          void delay2(){
+  57   1      
+  58   1          unsigned int i;
+  59   1          for(i=0;i<5000;i++);
+  60   1      }
+  61          
+  62          void lcdcmd(unsigned char val){
+  63   1          P3=val;
+  64   1          rs=0;
+  65   1          rw=0;
+  66   1          en=1;
+  67   1          delay2();
+  68   1          en=0;
+  69   1      }
+  70          
+  71          void lcddata(unsigned char val){
+  72   1          P3=val;
+  73   1          rs=1;
+  74   1          rw=0;
+  75   1          en=1;
+  76   1          delay2();
+  77   1          en=0;
+  78   1      }
+  79          
+  80          void displayInstruction(int count)
+  81          {
+  82   1        lcdcmd(0x01);
+  83   1        lcdcmd(0x38);delay2();
+  84   1        lcdcmd(0x80);delay2();
+  85   1        lcdcmd(0x0C);delay2();
+  86   1       
+  87   1        
+  88   1        
+  89   1        
+  90   1          if(count==1){
+  91   2          lcdcmd(0xC0);delay2();
+  92   2              for(j = 0; j < strlen(north); j++) {
+  93   3                lcddata(north[j]);delay2();
+  94   3              }
+  95   2          } 
+  96   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    310    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
